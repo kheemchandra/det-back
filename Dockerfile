@@ -1,4 +1,28 @@
-FROM python:3.11-bullseye
+FROM python:3.11
+
+# Install dependencies for building SQLite
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install newer version of SQLite
+WORKDIR /tmp
+RUN wget https://www.sqlite.org/2023/sqlite-autoconf-3420000.tar.gz \
+    && tar -xzf sqlite-autoconf-3420000.tar.gz \
+    && cd sqlite-autoconf-3420000 \
+    && ./configure --prefix=/usr/local \
+    && make \
+    && make install \
+    && cd .. \
+    && rm -rf sqlite-autoconf-3420000* \
+    && ldconfig
+
+# Set environment variables for SQLite
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+ENV PATH=/usr/local/bin:$PATH
+
+# Copy and install requirements
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
