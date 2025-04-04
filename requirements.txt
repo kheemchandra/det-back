@@ -1,0 +1,14 @@
+langchain
+# langchain-openai
+langchain-google-genai
+langchain-core
+langchain_community
+docx2txt
+pypdf
+langchain_chroma
+python-multipart
+fastapi
+uvicorn
+streamlit
+python-dotenv
+bs4
